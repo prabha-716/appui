@@ -12,7 +12,7 @@ interface MovieCardProps {
 
 const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
   return (
-    <div className="rounded-xl border border-[#dfdfdf] hover:cursor-pointer">
+    <div className="rounded-xl border border-[#dfdfdf] transform transition-all duration-150 hover:scale-105 active:scale-95 cursor-pointer ml-2.5 mt-2.5">
       <Card className="bg-[#0A1828] text-[#dfdfdf] hover:cursor-pointer">
         <img
           src={movie.poster}

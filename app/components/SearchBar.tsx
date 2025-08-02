@@ -24,7 +24,7 @@ const SearchBar = () => {
         onChange={(e) => setQuery(e.target.value)}
       />
       <Button
-        className="bg-[#FFFDF2] text-black border border-black hover:bg-black hover:text-[#FFFDF2] hover:cursor-pointer" 
+        className="bg-[#0A1828] text-[#dfdfdf] border-[#dfdfdf] border hover:text-[#0A1828] hover:bg-[#dfdfdf]  hover:cursor-pointer" 
         onClick={handleSearch}
       >
         Search
