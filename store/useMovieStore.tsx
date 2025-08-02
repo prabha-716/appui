@@ -18,7 +18,7 @@ export const useMovieStore = create<MovieStore>((set) => ({
       title: "Inception",
       year: 2010,
       rating: 8.8,
-      poster: "https://image.tmdb.org/t/p/w500/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg",
+      poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBFkA5BrJPOPRVofeMKFnfuBjWHx1K8pBwVw&s",
     },
     {
       title: "The Dark Knight",
@@ -36,7 +36,7 @@ export const useMovieStore = create<MovieStore>((set) => ({
       title: "Inception",
       year: 2010,
       rating: 8.8,
-      poster: "https://image.tmdb.org/t/p/w500/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg",
+      poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBFkA5BrJPOPRVofeMKFnfuBjWHx1K8pBwVw&s",
     },
     {
       title: "The Dark Knight",
@@ -49,12 +49,11 @@ export const useMovieStore = create<MovieStore>((set) => ({
       year: 2014,
       rating: 8.6,
       poster: "https://image.tmdb.org/t/p/w500/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg",
-    },
-        {
+    },    {
       title: "Inception",
       year: 2010,
       rating: 8.8,
-      poster: "https://image.tmdb.org/t/p/w500/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg",
+      poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBFkA5BrJPOPRVofeMKFnfuBjWHx1K8pBwVw&s",
     },
     {
       title: "The Dark Knight",
@@ -67,12 +66,11 @@ export const useMovieStore = create<MovieStore>((set) => ({
       year: 2014,
       rating: 8.6,
       poster: "https://image.tmdb.org/t/p/w500/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg",
-    },
-        {
+    },    {
       title: "Inception",
       year: 2010,
       rating: 8.8,
-      poster: "https://image.tmdb.org/t/p/w500/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg",
+      poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBFkA5BrJPOPRVofeMKFnfuBjWHx1K8pBwVw&s",
     },
     {
       title: "The Dark Knight",

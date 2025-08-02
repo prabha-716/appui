@@ -4,56 +4,30 @@ import React from "react";
 import { useMovieStore } from "@/store/useMovieStore";
 import MovieCard from "./components/MovieCard";
 import SearchBar from "./components/SearchBar";
+import MovieRow from "./components/MovieRow";
 
 export default function PageLayout() {
   const movies = useMovieStore((state) => state.movies);
 
   return (
-    <div className="min-h-screen bg-black text-white p-6 flex-row">
+    <div className="min-h-screen bg-[#FFFDF2] text-[#323232] p-6 flex-row font-sans">
       <div>
         <header className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-yellow-400">MOVIE RECOMMENDATION</h1>
-        <SearchBar />
+        <h1 className="text-6xl font-sans">MOVIE RECOMMENDATION</h1>
       </header>
       </div>
       <div className="flex flex-col justify-between gap-7">
-      <div className="h-60 border border-amber-300">
+      <div className="h-85 border border-[#c7ae94] ">
+        <p className="px-3.5 py-3.5 text-4xl font-sans">search your movie here..</p>
+              <div className=" px-3.5 py-3.5 ml-20"><SearchBar /></div>
+      </div>
+      <MovieRow movies={movies}/>
+      <div className="border-t border-[#c7ae94] my-6" />
+      <MovieRow movies={movies}/>
+      <div className="border-t border-[#c7ae94] my-6" />
+      <MovieRow movies={movies}/>
+      <div className="border-t border-[#c7ae94] my-6" />
 
-      </div>
-      <div className="max-w- h-70 px-1.5 py-1.5 border-amber-200 border ">
-
-      <div className="overflow-x-auto whitespace-nowrap pb-4">
-        <div className="flex gap-4">
-          {movies.map((movie, index) => (
-            <div key={index} className="inline-block w-64 flex-shrink-0">
-              <MovieCard movie={movie} />
-            </div>
-          ))}
-        </div>
-      </div>
-      </div>
-            <div className="max-w- h-70 px-1.5 py-1.5 border-amber-200 border ">
-      <div className="overflow-x-auto whitespace-nowrap pb-4">
-        <div className="flex gap-4">
-          {movies.map((movie, index) => (
-            <div key={index} className="inline-block w-64 flex-shrink-0">
-              <MovieCard movie={movie} />
-            </div>
-          ))}
-        </div>
-      </div>
-      </div>
-            <div className="max-w- h-70 px-1.5 py-1.5 border-amber-200 border ">
-      <div className="overflow-x-auto whitespace-nowrap pb-4">
-        <div className="flex gap-4">
-          {movies.map((movie, index) => (
-            <div key={index} className="inline-block w-64 flex-shrink-0">
-              <MovieCard movie={movie} />
-            </div>
-          ))}
-        </div>
-      </div>
-      </div>
       </div>
     </div>
   );

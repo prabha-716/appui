@@ -19,12 +19,12 @@ const SearchBar = () => {
     <div className="flex gap-2">
       <Input
         placeholder="Search movies..."
-        className="w-64"
+        className="w-1/2"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />
       <Button
-        className="bg-yellow-400 text-black hover:bg-yellow-300"
+        className="bg-[#FFFDF2] text-black border border-black hover:bg-black hover:text-[#FFFDF2] hover:cursor-pointer" 
         onClick={handleSearch}
       >
         Search
