@@ -23,20 +23,9 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-  @apply font-sans;
 
 
 }
-/* globals.css */
-.scroll-hide {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* IE and Edge */
-}
-
-.scroll-hide::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
-}
-
 /* In your CSS file or global styles */
 .scrollbar-hide {
   -ms-overflow-style: none; /* IE and Edge */

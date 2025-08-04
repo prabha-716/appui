@@ -5,14 +5,12 @@ import { useMovieStore } from "@/store/useMovieStore";
 
 const SearchBar = () => {
   const [query, setQuery] = useState("");
-  const { movies, setMovies } = useMovieStore();
+  const fetchAndRecommend = useMovieStore(state => state.fetchAndRecommend);
+  const isLoading = useMovieStore(state => state.isLoading);
 
   const handleSearch = () => {
-    const allMovies = useMovieStore.getState().movies;
-    const filtered = allMovies.filter((m) =>
-      m.title.toLowerCase().includes(query.toLowerCase())
-    );
-    setMovies(filtered.length ? filtered : allMovies);
+    if (!query.trim()) return;
+    fetchAndRecommend(query.trim());
   };
 
   return (
@@ -22,12 +20,14 @@ const SearchBar = () => {
         className="w-1/2"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && handleSearch()}
       />
       <Button
         className="bg-[#0A1828] text-[#dfdfdf] border-[#dfdfdf] border hover:text-[#0A1828] hover:bg-[#dfdfdf]  hover:cursor-pointer" 
         onClick={handleSearch}
+        disabled={isLoading}
       >
-        Search
+        {isLoading ? "Searching..." : "Search"}
       </Button>
     </div>
   );

@@ -1,5 +1,5 @@
 "use client";
-
+import { useEffect } from "react";
 import React from "react";
 import { useMovieStore } from "@/store/useMovieStore";
 import MovieCard from "./components/MovieCard";
@@ -8,14 +8,28 @@ import MovieRow from "./components/MovieRow";
 import MoviePosterScroller from "./components/MoviePosterScroller";
 import '@/app/globals.css';
 import { Geist } from 'next/font/google'
- 
+import  { popularMovieStore } from '@/store/popularMovieStore'
 const geist = Geist({
   subsets: ['latin'],
 })
 
 export default function PageLayout() {
-  const movies = useMovieStore((state) => state.movies);
+  // const movies = useMovieStore((state) => state.movies);
+  //  const { movies, isLoading, error, fetchMoreMovies } = popularMovieStore();
+  //  const fetchAndRecommend = useMovieStore(state => state.fetchAndRecommend);
+  //  const recommendedList = useMovieStore(state => state.recommendedList);
+   const {
+  popularMovies,
+  recommendedList,
+  fetchMoreMovies,
+  fetchAndRecommend,
+  isLoading,
+  error
+} = useMovieStore();
 
+  useEffect(() => {
+    fetchMoreMovies(); // Call only once on component mount
+  }, [fetchMoreMovies]);
   return (
     <div className="min-h-screen bg-[#0A1828] text-[#dfdfdf] p-4 sm:p-6 ${geist.className}`">
       <div className="container mx-auto">
@@ -45,11 +59,11 @@ export default function PageLayout() {
 
           </div>
 
-          <MovieRow movies={movies} />
+          <MovieRow movies={ popularMovies}  loadMoreMovies={fetchMoreMovies}/>
           <div className="border-t border-[#c7ae94] my-6" />
-          <MovieRow movies={movies} />
+          <MovieRow movies={recommendedList} loadMoreMovies={fetchMoreMovies} />
           <div className="border-t border-[#c7ae94] my-6" />
-          <MovieRow movies={movies} />
+          <MovieRow movies={recommendedList} loadMoreMovies={fetchMoreMovies}/>
           <div className="border-t border-[#c7ae94] my-6" />
 
         </div>

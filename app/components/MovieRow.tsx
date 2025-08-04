@@ -1,23 +1,49 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import MovieCard from "./MovieCard";
-import '@/app/globals.css';
+import "@/app/globals.css";
 
-interface MovieRowProps {
-  movies: {
-    title: string;
-    year: number;
-    rating: number;
-    poster: string;
-  }[];
+interface Movie {
+  title: string;
+  year: number;
+  rating: number;
+  poster: string;
 }
 
-const MovieRow: React.FC<MovieRowProps> = ({ movies }) => {
+interface MovieRowProps {
+  movies: Movie[];
+  loadMoreMovies: () => void; 
+}
+
+const MovieRow: React.FC<MovieRowProps> = ({ movies, loadMoreMovies }) => {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+      const handleScroll = () => {
+        if (
+          container.scrollLeft + container.clientWidth >= container.scrollWidth - 100
+        ) {
+          loadMoreMovies(); 
+        }
+        else{
+          
+        }
+      };
+
+    container.addEventListener("scroll", handleScroll);
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, [loadMoreMovies]);
+
   return (
-    
     <div className="max-w-full h-70 px-1.5 py-1.5 rounded-sm bg-transparent">
-      <div className="overflow-x-auto whitespace-nowrap pb-4 scrollbar-hide">
+      <div
+        ref={scrollContainerRef}
+        className="overflow-x-auto whitespace-nowrap pb-4 scrollbar-hide"
+      >
         <div className="flex gap-10">
           {movies.map((movie, index) => (
             <div key={index} className="inline-block w-64 flex-shrink-0">
