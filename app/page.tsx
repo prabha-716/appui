@@ -8,30 +8,28 @@ import MovieRow from "./components/MovieRow";
 import MoviePosterScroller from "./components/MoviePosterScroller";
 import '@/app/globals.css';
 import { Geist } from 'next/font/google'
-import  { popularMovieStore } from '@/store/popularMovieStore'
+
 const geist = Geist({
   subsets: ['latin'],
 })
 
 export default function PageLayout() {
-  // const movies = useMovieStore((state) => state.movies);
-  //  const { movies, isLoading, error, fetchMoreMovies } = popularMovieStore();
-  //  const fetchAndRecommend = useMovieStore(state => state.fetchAndRecommend);
-  //  const recommendedList = useMovieStore(state => state.recommendedList);
-   const {
-  popularMovies,
-  recommendedList,
-  fetchMoreMovies,
-  fetchAndRecommend,
-  isLoading,
-  error
-} = useMovieStore();
+  const {
+    popularMovies,
+    searchedMovie,
+    recommendedList,
+    fetchMoreMovies,
+    fetchAndRecommend,
+    isLoading,
+    error
+  } = useMovieStore();
 
   useEffect(() => {
-    fetchMoreMovies(); // Call only once on component mount
+    fetchMoreMovies(); // Load popular movies on component mount
   }, [fetchMoreMovies]);
+
   return (
-    <div className="min-h-screen bg-[#0A1828] text-[#dfdfdf] p-4 sm:p-6 ${geist.className}`">
+    <div className={`min-h-screen bg-[#0A1828] text-[#dfdfdf] p-4 sm:p-6 ${geist.className}`}>
       <div className="container mx-auto">
         <header className="flex items-center justify-between mb-6">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl">MOVIE RECOMMENDATION</h1>
@@ -47,7 +45,16 @@ export default function PageLayout() {
               <div className="p-4 sm:p-6">
                 <SearchBar />
               </div>
-              <p className="font-light sm:text-xl px-4">..</p>
+              {isLoading && (
+                <p className="font-light sm:text-xl px-4 pb-4 text-yellow-400">
+                  Searching for movies...
+                </p>
+              )}
+              {error && (
+                <p className="font-light sm:text-xl px-4 pb-4 text-red-400">
+                  Error: {error}
+                </p>
+              )}
             </div>
 
             <div className="relative w-full lg:w-[600px] h-[250px] lg:h-[280px]">
@@ -59,12 +66,52 @@ export default function PageLayout() {
 
           </div>
 
-          <MovieRow movies={ popularMovies}  loadMoreMovies={fetchMoreMovies}/>
-          <div className="border-t border-[#c7ae94] my-6" />
-          <MovieRow movies={recommendedList} loadMoreMovies={fetchMoreMovies} />
-          <div className="border-t border-[#c7ae94] my-6" />
-          <MovieRow movies={recommendedList} loadMoreMovies={fetchMoreMovies}/>
-          <div className="border-t border-[#c7ae94] my-6" />
+          {/* Recommended Movies Section - Only show if there are recommendations */}
+          {recommendedList.length > 0 && (
+            <>
+              
+              <div className="flex flex-col gap-4">
+                <h2 className="text-2xl sm:text-3xl font-semibold text-[#c7ae94]">
+                  Related Movies
+                  {searchedMovie && (
+                    <span className="text-2xl font-semibold text-[c7ae94]] ml-2">
+                       TO {searchedMovie.title}
+                    </span>
+                  )}
+                </h2>
+                <MovieRow 
+                  movies={recommendedList} 
+                  loadMoreMovies={() => {}} // Recommendations don't need pagination
+                />
+              </div>
+            </>
+            
+          )}
+                    <div className="flex flex-col gap-4">
+                      <div className="border-t border-[#c7ae94] my-6" />
+            <h2 className="text-2xl sm:text-3xl font-semibold text-[#c7ae94]">
+              Popular Movies
+            </h2>
+            <MovieRow 
+              movies={popularMovies} 
+              loadMoreMovies={fetchMoreMovies}
+            />
+          </div>
+
+          {/* Show message when search is performed but no recommendations found */}
+          {searchedMovie && recommendedList.length === 0 && !isLoading && (
+            <>
+              <div className="border-t border-[#c7ae94] my-6" />
+              <div className="text-center py-8">
+                <p className="text-xl text-[#c7ae94]">
+                  No similar movies found for "{searchedMovie.title}"
+                </p>
+                <p className="text-sm text-[#dfdfdf] mt-2">
+                  Try searching for a different movie
+                </p>
+              </div>
+            </>
+          )}
 
         </div>
       </div>

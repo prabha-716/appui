@@ -25,6 +25,7 @@ interface RecommendedMovie extends Movie {
 
 interface MovieStore {
   popularMovies: Movie[];
+  searchedMovie: Movie | null; // The exact movie that was searched
   recommendedList: RecommendedMovie[];
   isLoading: boolean;
   error: string | null;
@@ -32,6 +33,7 @@ interface MovieStore {
   hasMore: boolean;
   fetchMoreMovies: () => Promise<void>;
   fetchAndRecommend: (query: string) => Promise<void>;
+  clearSearch: () => void;
 }
 
 // Genre → binary vector
@@ -51,8 +53,28 @@ function cosineSimilarity(vecA: number[], vecB: number[]): number {
   return dot / (Math.sqrt(magA) * Math.sqrt(magB));
 }
 
+// String similarity function for better title matching
+function titleSimilarity(str1: string, str2: string): number {
+  const s1 = str1.toLowerCase().trim();
+  const s2 = str2.toLowerCase().trim();
+  
+  // Exact match gets highest score
+  if (s1 === s2) return 1;
+  
+  // Check if one string contains the other
+  if (s1.includes(s2) || s2.includes(s1)) return 0.8;
+  
+  // Simple word overlap scoring
+  const words1 = s1.split(/\s+/);
+  const words2 = s2.split(/\s+/);
+  const commonWords = words1.filter(word => words2.includes(word));
+  
+  return commonWords.length / Math.max(words1.length, words2.length);
+}
+
 export const useMovieStore = create<MovieStore>((set, get) => ({
   popularMovies: [],
+  searchedMovie: null,
   recommendedList: [],
   isLoading: false,
   error: null,
@@ -89,24 +111,53 @@ export const useMovieStore = create<MovieStore>((set, get) => ({
     }
   },
 
-  // 🎯 Recommend similar movies to a query
+  // Search for exact movie and recommend similar ones
   fetchAndRecommend: async (query: string) => {
     try {
-      set({ isLoading: true, error: null });
+      set({ isLoading: true, error: null, searchedMovie: null, recommendedList: [] });
 
-      // 1. Search the query movie
-      const queryRes = await fetch(`https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(query)}&api_key=e7c13ee2167cafbdce5d4a8eda2e0587`);
-      const queryData = await queryRes.json();
-      const baseMovie = queryData.results?.[0];
-      if (!baseMovie) {
-        console.warn("No query movie found.");
-        set({ recommendedList: [], isLoading: false });
+      // 1. Search for the query movie with multiple pages for better matching
+      let bestMatch: any = null;
+      let bestScore = 0;
+      
+      // Search through multiple pages to find the best title match
+      for (let page = 1; page <= 3; page++) {
+        const queryRes = await fetch(`https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(query)}&api_key=e7c13ee2167cafbdce5d4a8eda2e0587&page=${page}`);
+        const queryData = await queryRes.json();
+        
+        for (const movie of queryData.results || []) {
+          const score = titleSimilarity(query, movie.title);
+          if (score > bestScore) {
+            bestScore = score;
+            bestMatch = movie;
+          }
+        }
+        
+        // If we found a very good match, break early
+        if (bestScore >= 0.8) break;
+      }
+
+      if (!bestMatch) {
+        console.warn("No matching movie found for query:", query);
+        set({ searchedMovie: null, recommendedList: [], isLoading: false });
         return;
       }
 
-      const baseVector = genreToVector(baseMovie.genre_ids || []);
+      // Convert the searched movie to our Movie interface
+      const searchedMovie: Movie = {
+        title: bestMatch.title,
+        rating: bestMatch.vote_average,
+        year: Number(bestMatch.release_date?.split("-")[0]) || 0,
+        poster: `https://image.tmdb.org/t/p/w500${bestMatch.poster_path}`,
+        genres: bestMatch.genre_ids || []
+      };
 
-      // 2. Load 25 pages of movies
+      // Set the searched movie immediately so UI can display it
+      set({ searchedMovie });
+
+      const baseVector = genreToVector(bestMatch.genre_ids || []);
+
+      // 2. Load movies for recommendations (25 pages)
       let allMovies: Movie[] = [];
       for (let page = 1; page <= 25; page++) {
         const res = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=e7c13ee2167cafbdce5d4a8eda2e0587&page=${page}`);
@@ -121,7 +172,7 @@ export const useMovieStore = create<MovieStore>((set, get) => ({
         allMovies = allMovies.concat(batch);
       }
 
-      // 3. Calculate similarities
+      // 3. Calculate similarities (including all movies, even the searched one)
       const scored: RecommendedMovie[] = allMovies.map(movie => {
         const vec = genreToVector(movie.genres);
         return {
@@ -130,16 +181,34 @@ export const useMovieStore = create<MovieStore>((set, get) => ({
         };
       });
 
-      // 4. Sort top 50 similar
-      const recommendedList = scored
+      // 4. Sort all movies by similarity
+      const sortedMovies = scored
         .filter(m => m.similarity > 0)
-        .sort((a, b) => b.similarity - a.similarity)
-        .slice(0, 50);
+        .sort((a, b) => b.similarity - a.similarity);
+
+      // 5. Create final recommended list with searched movie first
+      const searchedMovieWithSimilarity: RecommendedMovie = {
+        ...searchedMovie,
+        similarity: 1 // Perfect similarity to itself
+      };
+
+      // Filter out the searched movie from sorted list and take top 49
+      const otherRecommendations = sortedMovies
+        .filter(movie => movie.title !== searchedMovie.title)
+        .slice(0, 49);
+
+      // Put searched movie first, then other recommendations
+      const recommendedList = [searchedMovieWithSimilarity, ...otherRecommendations];
 
       set({ recommendedList, isLoading: false });
     } catch (err: any) {
       console.error("Error during fetchAndRecommend:", err);
-      set({ recommendedList: [], isLoading: false });
+      set({ searchedMovie: null, recommendedList: [], isLoading: false });
     }
+  },
+
+  // 🧹 Clear search results
+  clearSearch: () => {
+    set({ searchedMovie: null, recommendedList: [], error: null });
   }
 }));
