@@ -39,14 +39,14 @@ const MovieRow: React.FC<MovieRowProps> = ({ movies, loadMoreMovies }) => {
   }, [loadMoreMovies]);
 
   return (
-    <div className="max-w-full h-70 px-1.5 py-1.5 rounded-sm bg-transparent">
+    <div className="max-w-full h-auto px-1.5 py-1.5 rounded-sm bg-transparent">
       <div
         ref={scrollContainerRef}
         className="overflow-x-auto whitespace-nowrap pb-4 scrollbar-hide"
       >
         <div className="flex gap-10">
           {movies.map((movie, index) => (
-            <div key={index} className="inline-block w-64 flex-shrink-0">
+            <div key={index} className="inline-block w-[10rem] flex-shrink-0">
               <MovieCard movie={movie} />
             </div>
           ))}

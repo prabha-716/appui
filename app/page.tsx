@@ -20,7 +20,8 @@ export default function PageLayout() {
     searchedMovie,
     recommendedList,
     fetchMoreMovies,
-    fetchAndRecommend,
+    movieListOfCast,
+    movieListOfDirecter,
     isLoading,
     error
   } = useMovieStore();
@@ -83,6 +84,14 @@ export default function PageLayout() {
                 </h2>
                 <MovieRow 
                   movies={recommendedList} 
+                  loadMoreMovies={() => {}} // Recommendations don't need pagination
+                />
+                <MovieRow 
+                  movies={movieListOfCast} 
+                  loadMoreMovies={() => {}} // Recommendations don't need pagination
+                />
+                <MovieRow 
+                  movies={ movieListOfDirecter} 
                   loadMoreMovies={() => {}} // Recommendations don't need pagination
                 />
               </div>

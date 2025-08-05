@@ -12,19 +12,19 @@ interface MovieCardProps {
 
 const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
   return (
-    <div className="rounded-xl border border-[#dfdfdf] transform transition-all duration-150 hover:scale-105 active:scale-95 cursor-pointer ml-2.5 mt-2.5">
+    <div className="rounded-xl border-top-[#dfdfdf] transform transition-all duration-150 hover:scale-105 active:scale-95 cursor-pointer ml-2.5 mt-2.5 w-[10rem]">
       <Card className="bg-[#0A1828] text-[#dfdfdf] hover:cursor-pointer">
-        <img
-          src={movie.poster}
-          alt={movie.title}
-          className="w-full h-40 object-cover rounded-t-xl"
-        />
-        <CardContent className="p-4">
+        <div className="w-full h-60 bg-black rounded-xl flex items-center justify-center">
+          <img
+            src={movie.poster}
+            alt={movie.title}
+            className="h-full object-contain rounded-xl"
+          />
+        </div>
+        <CardContent className="p-2">
           <h2 className="text-lg font-semibold mb-1">{movie.title}</h2>
           <p className="text-sm text-gray-600 mb-2">{movie.year}</p>
-          <div className="flex items-center gap-1 text-yellow-600 font-medium">
-            <span>⭐ {movie.rating}</span>
-          </div>
+          <span>⭐ {movie.rating}</span>
         </CardContent>
       </Card>
     </div>

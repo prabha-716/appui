@@ -7,6 +7,8 @@ interface SearchedMovieCardProps {
     year: number;
     rating: number;
     poster: string;
+    overview:string;
+  
   };
 }
 
@@ -19,7 +21,7 @@ const SearchedMovieCard: React.FC<SearchedMovieCardProps> = ({ movie }) => {
           src={movie.poster}
           alt={movie.title}
           className="w-1/2 h-40 object-cover rounded-xl p-4"
-        /><p className="p-4">oid;hvbliuzvb iouzb</p></div>
+        /><p className="p-4">{movie.overview}</p></div>
         <CardContent className="p-4">
           <div className="flex justify-between items-center mb-1">
             <h2 className="text-xl font-bold">{movie.title}</h2>
