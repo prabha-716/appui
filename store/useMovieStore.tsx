@@ -94,7 +94,7 @@ export const useMovieStore = create<MovieStore>((set, get) => ({
 
       const newMovies = data.results.map((movie: any) => ({
         title: movie.title,
-        rating: movie.vote_average,
+        rating: Number(movie.vote_average).toFixed(1),
         year: Number(movie.release_date?.split("-")[0]) || 0,
         poster: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
         genres: movie.genre_ids || []

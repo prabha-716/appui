@@ -8,6 +8,7 @@ import MovieRow from "./components/MovieRow";
 import MoviePosterScroller from "./components/MoviePosterScroller";
 import '@/app/globals.css';
 import { Geist } from 'next/font/google'
+import SearchedMovieCard from "./components/SearchedMovieCard";
 
 const geist = Geist({
   subsets: ['latin'],
@@ -46,7 +47,7 @@ export default function PageLayout() {
                 <SearchBar />
               </div>
               {isLoading && (
-                <p className="font-light sm:text-xl px-4 pb-4 text-yellow-400">
+                <p className="font-light sm:text-xl px-4 pb-4 text-[#dfdfdf">
                   Searching for movies...
                 </p>
               )}
@@ -59,9 +60,10 @@ export default function PageLayout() {
 
             <div className="relative w-full lg:w-[600px] h-[250px] lg:h-[280px]">
               <div className="absolute z-10 top-4 left-4 text-white text-xl font-sans">
-                POPULAR
+                
               </div>
-              <MoviePosterScroller />
+              {searchedMovie && <SearchedMovieCard movie={searchedMovie} />}
+
             </div>
 
           </div>

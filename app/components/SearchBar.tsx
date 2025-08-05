@@ -43,10 +43,10 @@ const SearchBar = () => {
         />
         {(query || searchedMovie) && (
           <Button
-            className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 hover:bg-gray-200"
+            className="absolute top-1/2 transform -translate-y-1/2 h-fit w-fit p-0 hover:bg-[#dfdfdf]"
             onClick={handleClear}
           >
-            <X className="h-4 w-4" />
+            <X  color ="white" className="h-4 w-4" />
           </Button>
         )}
       </div>
