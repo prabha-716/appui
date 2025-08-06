@@ -11,7 +11,7 @@ const genreKeys = Object.keys(genreMap).map(Number);
 
 interface Movie {
   title: string;
-  rating: Number;
+  rating: number;
   year: number;
   poster: string;
   genres: number[];
