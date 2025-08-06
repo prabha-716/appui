@@ -60,13 +60,17 @@ export default function PageLayout() {
             </div>
 
             <div className="relative w-full lg:w-[600px] h-[250px] lg:h-[280px]">
-              <div className="absolute z-10 top-4 left-4 text-white text-xl font-sans">
-                
-              </div>
-              {searchedMovie && <SearchedMovieCard movie={searchedMovie} />}
-
-            </div>
-
+  <div className="absolute z-10 top-4 left-4 text-white text-xl font-sans">
+    
+  </div>
+  {searchedMovie ? (
+    <SearchedMovieCard movie={searchedMovie} />
+  ) : (
+    <div>
+      <MoviePosterScroller/>
+    </div>
+  )}
+</div>
           </div>
 
           {/* Recommended Movies Section - Only show if there are recommendations */}
@@ -79,17 +83,33 @@ export default function PageLayout() {
                   {searchedMovie && (
                     <span className="text-2xl font-semibold text-[c7ae94]] ml-2">
                        TO {searchedMovie.title}
-                    </span>
+                    </span> 
                   )}
                 </h2>
                 <MovieRow 
                   movies={recommendedList} 
                   loadMoreMovies={() => {}} // Recommendations don't need pagination
                 />
+                <div className="border-t border-[#c7ae94] " />
+                <h2 className="text-2xl sm:text-3xl font-semibold text-[#c7ae94]">
+                   {searchedMovie && (
+                    <span className="text-2xl font-semibold text-[c7ae94]] ml-2">
+                       FROM CAST OF {searchedMovie.title}
+                    </span> 
+                  )} 
+            </h2>
                 <MovieRow 
                   movies={movieListOfCast} 
                   loadMoreMovies={() => {}} // Recommendations don't need pagination
                 />
+                <div className="border-t border-[#c7ae94] "/>
+                <h2 className="text-2xl sm:text-3xl font-semibold text-[#c7ae94]">
+                           {searchedMovie && (
+                    <span className="text-2xl font-semibold text-[c7ae94]] ml-2">
+                       FROM DIRECTOR OF  {searchedMovie.title}
+                    </span> 
+                  )} 
+                  </h2>
                 <MovieRow 
                   movies={ movieListOfDirecter} 
                   loadMoreMovies={() => {}} // Recommendations don't need pagination
@@ -99,7 +119,7 @@ export default function PageLayout() {
             
           )}
                     <div className="flex flex-col gap-4">
-                      <div className="border-t border-[#c7ae94] my-6" />
+                      <div className="border-t border-[#c7ae94] " />
             <h2 className="text-2xl sm:text-3xl font-semibold text-[#c7ae94]">
               Popular Movies
             </h2>
