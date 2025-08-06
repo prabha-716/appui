@@ -10,7 +10,7 @@
     return (
       <div className="py-0 px-0">
         <div
-          className="flex gap-4 overflow-x-auto whitespace-nowrap scroll-hide cursor-pointer rounded-lg">
+          className="flex gap-4 overflow-x-auto whitespace-nowrap scrollbar-hide cursor-pointer rounded-lg">
           {posters.map((poster, index) => (
             <img
               key={index}

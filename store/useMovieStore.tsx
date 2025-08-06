@@ -11,7 +11,7 @@ const genreKeys = Object.keys(genreMap).map(Number);
 
 interface Movie {
   title: string;
-  rating: number;
+  rating: Number;
   year: number;
   poster: string;
   genres: number[];
@@ -129,7 +129,7 @@ export const useMovieStore = create<MovieStore>((set, get) => ({
 
       const searchedMovie: Movie = {
         title: bestMatch.title,
-        rating: bestMatch.vote_average,
+        rating: Number(bestMatch.vote_average),
         year: Number(bestMatch.release_date?.split("-")[0]) || 0,
         poster: `https://image.tmdb.org/t/p/w500${bestMatch.poster_path}`,
         genres: bestMatch.genre_ids || [],
